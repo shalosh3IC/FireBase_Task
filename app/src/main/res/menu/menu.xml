@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="All Notes"
+        android:id="@+id/AN"
+        android:orderInCategory="100"/>
+    <item
+        android:title="Important Notes"
+        android:id="@+id/IN"
+        android:orderInCategory="200"/>
+    <item
+        android:title="Not Important Notes"
+        android:id="@+id/NIN"
+        android:orderInCategory="300"/>
+    <item
+        android:title="Log Out"
+        android:id="@+id/LG"
+        android:orderInCategory="400"/>
+</menu>
