@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.firebase_task" />
-                  <option name="mobileSdkAppId" value="1:318481563891:android:47640d92160f798d8ef786" />
-                  <option name="projectId" value="firebasetask-cd00a92a" />
-                  <option name="projectNumber" value="318481563891" />
+                  <option name="mobileSdkAppId" value="1:76367547311:android:d2fa3cae62a66fe4a27d5a" />
+                  <option name="projectId" value="fir-task-adc07" />
+                  <option name="projectNumber" value="76367547311" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

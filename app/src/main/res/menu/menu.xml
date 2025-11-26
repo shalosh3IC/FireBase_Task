@@ -16,4 +16,12 @@
         android:title="Log Out"
         android:id="@+id/LG"
         android:orderInCategory="400"/>
+    <item
+        android:title="Set BackGround"
+        android:id="@+id/SB"
+        android:orderInCategory="350"/>
+    <item
+        android:title="Delete Background"
+        android:id="@+id/DB"
+        android:orderInCategory="360"/>
 </menu>

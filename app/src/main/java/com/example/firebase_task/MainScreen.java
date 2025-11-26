@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -27,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -71,8 +74,9 @@ public class MainScreen extends AppCompatActivity implements AdapterView.OnItemC
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main_screen);
+
         GetImageFS();
-        name.findViewById(R.id.name);
+        name = findViewById(R.id.name);
         name.setText(FBref.refAuth.getCurrentUser().getEmail());
         button33 = findViewById(R.id.button33);
         LV = findViewById(R.id.LV);
@@ -92,70 +96,43 @@ public class MainScreen extends AppCompatActivity implements AdapterView.OnItemC
     public void GetImageFS()
     {
         DocumentReference docRef = FBref.RefImages.document("background");
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>()
-        {
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot)
-            {
-                if(documentSnapshot.exists())
-                {
-                    com.google.firebase.firestore.Blob blob = (com.google.firebase.firestore.Blob) documentSnapshot.get("imageContent");
-                    byte[] bytes = blob.toBytes();
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Blob blob = (Blob) documentSnapshot.getBlob("imageContent");
                     if (blob != null)
                     {
+                        byte[] bytes = blob.toBytes();
                         bytes = blob.toBytes();
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         ByteArrayOutputStream B = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, B);
-                        String path = MediaStore.Images.Media.insertImage(MainScreen.this.getContentResolver(), bitmap, "Title", null);
-                        Uri image = Uri.parse(path);
                         code = 1;
-                        BackgroundChange(image);
-                    }
-                    else
-                    {
-                        Toast.makeText(MainScreen.this, "Image download failed", Toast.LENGTH_LONG).show();
+                        BackgroundChange(bitmap);
                     }
                 }
             }
-        }).addOnFailureListener(new OnFailureListener()
-        {
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e)
-            {
+            public void onFailure(@NonNull Exception e) {
                 Toast.makeText(MainScreen.this, "Image download failed", Toast.LENGTH_LONG).show();
             }
         });
     }
-    public void BackgroundChange(Uri image)
+    public void BackgroundChange(Bitmap image)
     {
-        LinearLayout mainLayout = findViewById(R.id.main);
-        if (image != null && mainLayout != null) {
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(image);
-                Drawable drawable = Drawable.createFromStream(inputStream, image.toString());
-                mainLayout.setBackground(drawable);
-                if (inputStream != null)
-                {
-                    inputStream.close();
-                }
-            }
-            catch (FileNotFoundException e)
-            {
-                Log.e("MainActivity", "File not found for URI: " + image, e);
-                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e)
-            {
-                Log.e("MainActivity", "Error setting background from URI: " + image, e);
-                Toast.makeText(this, "Error setting background", Toast.LENGTH_SHORT).show();
-            }
+        ConstraintLayout mainLayout = findViewById(R.id.main);
+        if (image != null)
+        {
+            Drawable drawable = new BitmapDrawable(getResources(),image);
+            mainLayout.setBackground(drawable);
         }
         else
         {
             if (image == null)
             {
-                Log.w("MainActivity", "Image URI is null.");
+                Log.w("MainActivity", "Image is null.");
             }
             if (mainLayout == null)
             {
@@ -277,6 +254,23 @@ public class MainScreen extends AppCompatActivity implements AdapterView.OnItemC
             Intent tttt = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(tttt, 3);
         }
+        else if(str.equals("Delete Background"))
+        {
+            DocumentReference docRef = FBref.RefImages.document("background");
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>()
+            {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot)
+                {
+                    if(documentSnapshot.exists())
+                    {
+                        docRef.delete();
+                    }
+                }
+            });
+            ConstraintLayout mainLayout = findViewById(R.id.main);
+            mainLayout.setBackgroundResource(R.color.white);
+        }
         else if(str.equals("Log Out"))
         {
             Intent tt = new Intent(MainScreen.this, MainActivity.class);
@@ -332,7 +326,7 @@ public class MainScreen extends AppCompatActivity implements AdapterView.OnItemC
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(MainScreen.this, "Operation Success", Toast.LENGTH_SHORT).show();
-                        BackgroundChange(image);
+                        BackgroundChange(bitmap);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

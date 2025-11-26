@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "318481563891",
-    "project_id": "firebasetask-cd00a92a",
-    "storage_bucket": "firebasetask-cd00a92a.firebasestorage.app"
+    "project_number": "76367547311",
+    "firebase_url": "https://fir-task-adc07-default-rtdb.firebaseio.com",
+    "project_id": "fir-task-adc07",
+    "storage_bucket": "fir-task-adc07.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:318481563891:android:47640d92160f798d8ef786",
+        "mobilesdk_app_id": "1:76367547311:android:d2fa3cae62a66fe4a27d5a",
         "android_client_info": {
           "package_name": "com.example.firebase_task"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAD3GVwWCSGcWwStXaqKEpCwNiXbjLDznA"
+          "current_key": "AIzaSyCns4b94ZcZ-9A5tYfwxyWXwzFxDB3H6Ec"
         }
       ],
       "services": {

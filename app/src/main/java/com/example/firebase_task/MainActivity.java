@@ -24,7 +24,6 @@ import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,17 +44,12 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         init();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SignUp(view);
-                FirebaseUser user = FBref.refAuth.getCurrentUser();
-                if(user != null)
-                {
-                    Intent tt = new Intent(MainActivity.this, MainScreen.class);
-                    startActivity(tt);
-                }
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
@@ -105,28 +99,24 @@ public class MainActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     pd.dismiss();
                     if (task.isSuccessful()) {
-                        Log.i("MainActivity", "createUserWithEmailAndPassword:success");
-                        FirebaseUser user = FBref.refAuth.getCurrentUser();
-                        textView1Title.setText("User created successfully\nUid: "+user.getUid());
+                        textView1Title.setText("User created successfully");
+                        Intent tt = new Intent(MainActivity.this, MainScreen.class);
+                        startActivity(tt);
                     }
                     else
                     {
                         Exception exp = task.getException();
-                        if (exp instanceof FirebaseAuthInvalidUserException)
-                        {
-                            textView1Title.setText("Invalid email address.");
-                        }
-                        else if (exp instanceof FirebaseAuthWeakPasswordException)
+                        if (exp instanceof FirebaseAuthWeakPasswordException)
                         {
                             textView1Title.setText("Password too weak.");
                         }
-                        else if (exp instanceof FirebaseAuthUserCollisionException)
-                        {
-                            textView1Title.setText("User already exists.");
-                        }
                         else if (exp instanceof FirebaseAuthInvalidCredentialsException)
                         {
-                            textView1Title.setText("General authentication failure.");
+                            textView1Title.setText("Invalid email format.");
+                        }
+                        else if (exp instanceof FirebaseAuthUserCollisionException)
+                        {
+                            textView1Title.setText("An account with this email already exists.");
                         }
                         else if (exp instanceof FirebaseNetworkException)
                         {
@@ -134,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else
                         {
+                            Log.e("MainActivity", "SignUp failed", exp);
                             textView1Title.setText("An error occurred. Please try again later.");
                         }
                     }

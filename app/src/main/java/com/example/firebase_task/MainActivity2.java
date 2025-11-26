@@ -33,8 +33,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity2 extends AppCompatActivity {
 
     TextView textView1Title;
-    EditText EtEmail, EtPassword;
-    Button button, button2;
+    EditText EtEmail2, EtPassword2;
+    Button button21, button22;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,20 +46,15 @@ public class MainActivity2 extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         init();
-        button.setOnClickListener(new View.OnClickListener() {
+        button21.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LogIn(view);
-                FirebaseUser user = FBref.refAuth.getCurrentUser();
-                if(user != null)
-                {
-                    Intent tt = new Intent(MainActivity2.this, MainScreen.class);
-                    startActivity(tt);
-                }
             }
         });
-        button2.setOnClickListener(new View.OnClickListener() {
+        button22.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent tt = new Intent(MainActivity2.this, MainActivity.class);
@@ -81,16 +76,16 @@ public class MainActivity2 extends AppCompatActivity {
     public void init()
     {
         textView1Title = findViewById(R.id.textView1Title);
-        EtEmail = findViewById(R.id.EtEmail);
-        EtPassword = findViewById(R.id.EtPassword);
-        button = findViewById(R.id.button);
-        button2 = findViewById(R.id.button2);
+        EtEmail2 = findViewById(R.id.EtEmail2);
+        EtPassword2 = findViewById(R.id.EtPassword2);
+        button21 = findViewById(R.id.button21);
+        button22 = findViewById(R.id.button22);
     }
     public void LogIn(View view)
     {
         init();
-        String email = EtEmail.getText().toString();
-        String pass = EtPassword.getText().toString();
+        String email = EtEmail2.getText().toString();
+        String pass = EtPassword2.getText().toString();
         if (email.isEmpty() || pass.isEmpty())
         {
             textView1Title.setText("Please fill all fields");
@@ -108,7 +103,8 @@ public class MainActivity2 extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.i("MainActivity", "createUserWithEmailAndPassword:success");
                         FirebaseUser user = FBref.refAuth.getCurrentUser();
-                        textView1Title.setText("user logged in successfully");
+                        Intent tt = new Intent(MainActivity2.this, MainScreen.class);
+                        startActivity(tt);
                     }
                     else
                     {
@@ -127,7 +123,7 @@ public class MainActivity2 extends AppCompatActivity {
                         }
                         else if (exp instanceof FirebaseAuthInvalidCredentialsException)
                         {
-                            textView1Title.setText("General authentication failure.");
+                            textView1Title.setText("Invalid credentials.");
                         }
                         else if (exp instanceof FirebaseNetworkException)
                         {
